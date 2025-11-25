@@ -38,42 +38,36 @@ def json_read_from_file(file_path: str):
         print(f'err: f:json_read_from_file - file read error {err}')
         raise err
 
-def json_write_to_file(data: any,folder_name: str, file_name: str,  append: bool = False):
+def json_write_to_file(data: any, file_path: str,  append: bool = False):
     """
     write json data to file
     Args: 
         data(any): data for write to file
-        folder_name(str): name of added folder
-        file_name(str): file name in added folder
+        file_path(str): path to json file
         append(bool)=False: False - rewrite file, True - append file
     """
     if data == "":
         err: str = 'err: f:write_to_file - arg data is empty'
         print(err)
-        raise ValueError(err)
-    if file_name == "":
+        return
+    if file_path == "":
         err: str = 'err: f:write_to_file - arg file_name is empty'
         print(err)
-        raise ValueError(err)
-    if folder_name == "":
-        err: str = 'err: f:write_to_file - arg folder_name is empty'
-        print(err)
-        raise ValueError(err)
-    file_path: str = os.path.join(public_var.PATH_TO_FOLDERS, folder_name, file_name)
+        return
     if append:
         try:
             with open(file_path, 'a', encoding='utf-8') as json_file:
                 json.dump(data, json_file, ensure_ascii=False, indent=4)
         except IOError as err:
             print(f'err: f:json_write_to_file - {err}')
-        print(f'Write data to file {file_name} in folder {folder_name} was success!')
+        print(f'Write data to file {file_path} was success!')
     else:
         try:
             with open(file_path, 'w', encoding='utf-8') as json_file:
                 json.dump(data, json_file, ensure_ascii=False, indent=4)
         except IOError as err:
             print(f'err: f:json_write_to_file - {err}')
-        print(f'Write data to file {file_name} in folder {folder_name} was success!')
+        print(f'Write data to file {file_path} was success!')
 
 def json_deserialization(data: any):
     """

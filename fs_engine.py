@@ -52,11 +52,12 @@ def delete_folder(folder_path: str):
 
 def get_full_path_tech_folder(folder_name: str = ""):
     path_to_tech_folder: str = ""
-    if public_var.current_menu == "main": 
-        print(f'err: f:get_full_path_tech_folder - cannot return full path to main menu, it not folder!')
-        return ""
     if folder_name == "":
+        if public_var.current_menu == "main": 
+            print(f'err: f:get_full_path_tech_folder - cannot return full path to main menu, it not folder!')
+            return ""
         path_to_tech_folder = os.path.join(public_var.PATH_TO_FOLDERS, public_var.current_menu)
+        return path_to_tech_folder
     else:
         path_to_tech_folder = os.path.join(public_var.PATH_TO_FOLDERS, folder_name)
         if os.path.exists(path_to_tech_folder):
@@ -75,6 +76,9 @@ def get_full_path_original_folder(folder_name: str = ""):
         else:
             print(f'err: f:get_full_path_original_folder - cannot return full path to main menu, it not folder!')
             return ""
+    if tech_folder_path == "": 
+        print(f'err: f:get_full_path_original_folder - cannot get full path of folder {folder_name}')
+        return
     json_file_path: str = os.path.join(tech_folder_path, "path.json")
     full_original_path:str = json_engine.json_read_from_file(json_file_path)
     return full_original_path

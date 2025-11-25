@@ -4,6 +4,8 @@ import json_engine
 import pathlib
 import os
 import typing
+import datetime
+import sys
 
 def get_promt_from_user(message: str = ""):
     """
@@ -48,11 +50,20 @@ def perform_command(user_command: str):
 
 def perform_scan_command(folder_name: str = ""):
     path_to_folder: str = fs_engine.get_full_path_original_folder(folder_name)
+    path_to_tech_folder: str = fs_engine.get_full_path_tech_folder(folder_name)
+    if path_to_folder != "" and path_to_tech_folder != "":
+        base = pathlib.Path(path_to_folder)
+        paths: typing.List[str] = []
+        for p in base.rglob('*'):
+            paths.append(str(p))
+        # todo добавить перебор отдельных файлов в цикле и добавления мета инфы к данным(дата изменения, размер, хешсумма и тд)
+        timestamp = datetime.datetime.now()
+        timestamp = timestamp.strftime("%Y%m%d%H%M%S%f")
+        json_file_name: str = "scan_" + timestamp + ".json"
+        path_json_file: str = os.path.join(path_to_tech_folder, json_file_name)
+        json_engine.json_write_to_file(paths, path_json_file)        
 
-    base = pathlib.Path(path_to_folder)
-    paths = [p for p in base.rglob("*")]
-
-    print(paths)
+        print(paths)
 
 def perform_help_command():
     """
@@ -64,12 +75,14 @@ def perform_help_command():
         print('  add, open -- add folder to monitoring ')
         print('  list, ls, dir -- print list of added folders')
         print('  select, s, -s, cd -- select folder')
+        print('  scan, check - scan all files, folders, changes in added folder and log it')
         print('  delete, del, -d, d, rm -- delete folder from monitoring')
         print('  quit, exit, q -- exit from programm')
     else:
         print('  help, h, -h -- list commands with note')
         print(f'SELECTED FOLDER {public_var.current_menu}')
         print('  path, -p, p - show full path to selected folder')
+        print('  scan, check - scan all files, folders, changes in current selected folder, and log it')
         print('  quit, back, -b, -q, q, b, cd .. - back to MAIN MENU')
 
 def perform_add_folder(path_to_folder: str = ""):
