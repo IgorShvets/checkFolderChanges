@@ -1,6 +1,7 @@
 import public_var
 import fs_engine
 import json_engine
+import pathlib
 import os
 import typing
 
@@ -45,8 +46,13 @@ def perform_command(user_command: str):
         case _:
             print("have not command \"" + user_command + "\", type \"" + "help" + "\" for command list")
 
-def perform_scan_command(folder_name: str):
-    pass #обработка сканирования каталога
+def perform_scan_command(folder_name: str = ""):
+    path_to_folder: str = fs_engine.get_full_path_original_folder(folder_name)
+
+    base = pathlib.Path(path_to_folder)
+    paths = [p for p in base.rglob("*")]
+
+    print(paths)
 
 def perform_help_command():
     """
@@ -132,7 +138,6 @@ def perform_select_menu(menu_name: str = ""):
     select folsers menu or main menu
     """
     if menu_name == "":
-        print(f'log:{menu_name}!')
         perform_list_command()
         menu_name = get_promt_from_user("Enter menu name or name of folder: ")
     if menu_name == "main":

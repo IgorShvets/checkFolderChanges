@@ -17,7 +17,7 @@ def json_serialization(data: any):
     
     return json_data
 
-def json_read_from_file(folder_name: str, file_name: str):
+def json_read_from_file(file_path: str):
     """
     read json data from file
     Args: 
@@ -26,7 +26,6 @@ def json_read_from_file(folder_name: str, file_name: str):
     Returns:
         any: Python object with deserialize json data
     """
-    file_path: str = os.path.join(public_var.PATH_TO_FOLDERS, folder_name, file_name)
     try:
         with open(file_path, 'r', encoding='utf-8') as json_file:
             try:
@@ -34,7 +33,6 @@ def json_read_from_file(folder_name: str, file_name: str):
             except json.JSONDecodeError as err:
                 print(f'err: f:json_read_from_file - decode json from file {err}')
                 raise err
-            print(f'Read json file {file_name} from folder {folder_name} was success!')
             return json_data
     except IOError as err:
         print(f'err: f:json_read_from_file - file read error {err}')
